@@ -1,0 +1,48 @@
+---
+title: "SQL connection template"
+author: Data
+editor: visual
+---
+
+```{r setup, include=FALSE}
+library(DBI) # 
+library(RMariaDB) # Dont have to neccessarily  
+library(dplyr)
+```
+
+```{r connection-parameters}
+# Parameters
+user <- '' # Username
+password <- '' # Password
+database <- '' 
+host <- '' # address of the server
+port <- 3306
+```
+
+```{r connection}
+# Connect to the database
+connection <- DBI::dbConnect(drv = MariaDB(), 
+                             dbname = database,
+                             host = host, 
+                             port = port, 
+                             user = user, 
+                             password = password)
+```
+
+```{r fetch}
+# Fetch results
+tbl(connection, "") %>% # name of table goes in the quotation
+  collect() -> data
+```
+
+```{r disconnect}
+# Disconnect from the database
+DBI::dbDisconnect(connection)
+```
+
+```{r preview}
+# Preview you shouldn't have to connect again
+data
+```
+
+## 
