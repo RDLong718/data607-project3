@@ -1,2 +1,11 @@
 /Data_Science_Skills_data_docu.pdf filter=lfs diff=lfs merge=lfs -text
 /Project[[:space:]]3[[:space:]]-[[:space:]]Data[[:space:]]Science[[:space:]]Skills[[:space:]]-[[:space:]][[:space:]]Instructions.pdf filter=lfs diff=lfs merge=lfs -text
+/Data/company_details/companies.csv filter=lfs diff=lfs merge=lfs -text
+/Data/company_details/company_industries.csv filter=lfs diff=lfs merge=lfs -text
+/Data/company_details/company_specialities.csv filter=lfs diff=lfs merge=lfs -text
+/Data/company_details/employee_counts.csv filter=lfs diff=lfs merge=lfs -text
+/Data/job_details/benefits.csv filter=lfs diff=lfs merge=lfs -text
+/Data/job_details/job_industries.csv filter=lfs diff=lfs merge=lfs -text
+/Data/job_details/job_skills.csv filter=lfs diff=lfs merge=lfs -text
+/Data/job_details/salaries.csv filter=lfs diff=lfs merge=lfs -text
+/Data/job_postings.csv filter=lfs diff=lfs merge=lfs -text
