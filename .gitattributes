@@ -10,3 +10,14 @@
 /Data/job_details/job_skills.csv filter=lfs diff=lfs merge=lfs -text
 /Data/job_details/salaries.csv filter=lfs diff=lfs merge=lfs -text
 /Data/job_postings.csv filter=lfs diff=lfs merge=lfs -text
+/Data/job_postings_json.json filter=lfs diff=lfs merge=lfs -text
+/Data/json_versions/benefits.json filter=lfs diff=lfs merge=lfs -text
+/Data/json_versions/companies.json filter=lfs diff=lfs merge=lfs -text
+/Data/json_versions/company_industries.json filter=lfs diff=lfs merge=lfs -text
+/Data/json_versions/company_specialties.json filter=lfs diff=lfs merge=lfs -text
+/Data/json_versions/df_company_industries.json filter=lfs diff=lfs merge=lfs -text
+/Data/json_versions/employee_counts.json filter=lfs diff=lfs merge=lfs -text
+/Data/json_versions/job_industries.json filter=lfs diff=lfs merge=lfs -text
+/Data/json_versions/job_skills.json filter=lfs diff=lfs merge=lfs -text
+/Data/json_versions/salaries.json filter=lfs diff=lfs merge=lfs -text
+/test.json filter=lfs diff=lfs merge=lfs -text
