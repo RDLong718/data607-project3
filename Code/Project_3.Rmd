@@ -55,9 +55,12 @@ Here's a template for searching for words/terms:
 #linkedin_clean$colName <- ifelse(grepl('term1|term2|term3', linkedin_clean$description, ignore.case = TRUE), 1,0)
 #linkedin_clean$ <- ifelse(grepl('', linkedin_clean$description, ignore.case = TRUE), 1,0)
 ```{r}
-linkedin_clean$Programming <- ifelse(grepl('python| r | r/|/r/|/r|c\\+\\+|sql', linkedin_clean$description, ignore.case = TRUE), 1,0)
+linkedin_clean$Programming <- ifelse(grepl('python| r | r/|/r/|/r|\\(r,| r,| r.|c\\+\\+|sql', linkedin_clean$description, ignore.case = TRUE), 1,0)
 linkedin_clean$Machine_Learning <- ifelse(grepl('machine learning| ml|algorithms|scikit learn|transformers|language model', linkedin_clean$description, ignore.case = TRUE), 1,0)
 linkedin_clean$Stats <- ifelse(grepl('data analysis|data analytics|statistical analysis|data-driven analysis', linkedin_clean$description, ignore.case = TRUE), 1,0)
+linkedin_clean$cloud_computing <- ifelse(grepl('cloud computing| aws|\\(aws|/aws|amazon web|google cloud', linkedin_clean$description, ignore.case = TRUE), 1,0)
+linkedin_clean$visualization <- ifelse(grepl('visualization|presentation', linkedin_clean$description, ignore.case = TRUE), 1,0)
+linkedin_clean$collaberation <- ifelse(grepl('team work|with a team|collaberat|scrum team|agile team', linkedin_clean$description, ignore.case = TRUE), 1,0)
 ```
 
 
