@@ -42,11 +42,11 @@ import pandas as pd
 #         json_file.write(json_data)
 
 
-df = pd.read_csv("Data\maps\industries.csv")
+df = pd.read_csv("Data\job_postings.csv")
 
 # Convert the dataframe to json format
 json_data = df.to_json(orient="records")
 
 # Write the json data to a file
-with open("Data/json_versions/industries.json", "w") as json_file:
+with open("Data/json_versions/job_postings.json", "w") as json_file:
     json_file.write(json_data)
