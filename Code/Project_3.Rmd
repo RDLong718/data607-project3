@@ -1,0 +1,54 @@
+---
+title: "Project 3"
+author: "Brandon Cunningham, 
+Rashad Long, 
+Biyag Dukuray, 
+Nikoleta Emanouilidi, 
+Markella Gialouris"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(eval = TRUE, message = FALSE, warning = FALSE)
+library(readr)
+library(dplyr)
+library(tidyverse)
+library(knitr)
+```
+
+## Introduction
+In this project we will be attempting to figure out the value of certain skills for a data scientist to have. Our method for determining value revolves around grabbing job postings for data scientists from job board websites and obtaining the expected salary of each listing and the skills mentioned in its description in conjunction with the pure number of times a skill is mentioned to come up with a proxy measure for its relative value compared to other skills.
+
+
+```{r}
+Postings_url <- 'https://media.githubusercontent.com/media/RDLong718/data607-project3/main/Data/job_postings.csv'
+Postings_raw <- readr::read_csv(Postings_url)
+Salries_url <- 'https://media.githubusercontent.com/media/RDLong718/data607-project3/main/Data/job_details/salaries.csv'
+Salaries_raw <- readr::read_csv(Salries_url)
+```
+
+```{r}
+linkedin_postings <- Postings_raw[c('job_id', 'title', 'description')]
+linkedin_salaries <- Postings_raw[c('job_id', 'max_salary', 'min_salary', 'med_salary', 'pay_period')]
+```
+
+```{r}
+linkedin_salaries$med_salary <- (linkedin_salaries$max_salary + linkedin_salaries$min_salary)/2
+linkedin_salaries$med_salary[linkedin_salaries$pay_period == 'HOURLY' & !is.na(linkedin_salaries$pay_period)] <- linkedin_salaries$med_salary[linkedin_salaries$pay_period == 'HOURLY' & !is.na(linkedin_salaries$pay_period)] * 40 * 52
+linkedin_salaries$med_salary[linkedin_salaries$med_salary < 1000 & !is.na(linkedin_salaries$med_salary)] <- linkedin_salaries$med_salary[linkedin_salaries$med_salary < 1000] * 1000
+salaries_clean <- linkedin_salaries[c('job_id', 'med_salary')]
+#top_5 <- head(salaries_clean, 5)
+#kable(top_5)
+```
+
+```{r}
+data_science_postings <- linkedin_postings[grepl("data science|data scientist", linkedin_postings$title, ignore.case = TRUE), ]
+linkedin_clean <- merge(data_science_postings, salaries_clean, by = 'job_id', all.x=TRUE)
+linkedin_clean$med_salary[is.na(linkedin_clean$med_salary)] <- median(linkedin_clean$med_salary, na.rm=TRUE)
+#top_5 <- head(linkedin_clean, 5)
+#kable(top_5)
+```
+After cleaning up the data sets we now have a combined data set with the job titles, descriptions, and median expected salaries for each position.
+
+
