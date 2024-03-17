@@ -22,6 +22,7 @@ library(magrittr) # For piping the logo to the plot
 library(gtable)
 library(grid)
 library(png)
+library(kableExtra)
 ```
 
 ## Introduction
@@ -161,3 +162,43 @@ top5_skills_plot <- function(x, width = 3) {
 
 top5_skills_plot(top5_skills) + scale_fill_manual(values = c("#caf0f8", "#00b4d8", "#03045e", "#0077b6", "#90e0ef")) + annotation_custom(logo)
 ```
+
+
+```{r}
+cols <- names(linkedin_clean)[5:14]  
+
+Skill_Salary <- data.frame(Skill = cols,
+                     Avg_Salary = NA) 
+
+for (col in cols) {
+  sum_salary <- sum(linkedin_clean$med_salary[linkedin_clean[, col] == 1])
+
+  sum_ones <- sum(linkedin_clean[, col] == 1)
+
+  avg_salary <- sum_salary / sum_ones
+
+  Skill_Salary$Avg_Salary[Skill_Salary$Skill == col] <- avg_salary
+}
+
+kable(Skill_Salary[order(Skill_Salary$Avg_Salary, decreasing = TRUE), ], row.names = FALSE) %>%
+  kable_styling(full_width = FALSE)
+```
+With this we can see that the most monetarily valuable skill appears to be Cloud Computing with LinkedIn Data science position postings that mention this skill having an expected salary over $3,000 higher than second place Statistics, however the gap of all skills is less than might be expected with the top ranking skill offering an average salary only around 8% higher than the lowest ranking skill, Predictive Analytics.
+
+
+
+```{r}
+
+manual_colors <- c("#caf0f8", "#90e0ef", "#48cae4", "#00b4d8", "#0096c7", "#0077b6", "#023e8a", "#03045e", "#001d3d", "#000080")
+
+ggplot(Skill_Salary, aes(x = reorder(Skill, -Avg_Salary), y = Avg_Salary, fill=Skill)) + 
+  geom_bar(stat = "identity") +
+  theme_minimal() + 
+  labs(title = "Average Salary by Required Skill on LinkedIn for Data Scientist", x = "Skill", y = "Average Salary") +
+  coord_flip() + 
+  theme(plot.title = element_text(hjust = 0.5)) +
+  scale_fill_manual(values = manual_colors)
+
+```
+
+
