@@ -1,11 +1,10 @@
 ---
-title: "Project 3 - Data Science Skills"
-author:
- - Brandon Cunningham^[btc2628@g.rit.edu]
- - Rashad Long^[RDLong718@gmail.com]
- - Biyag Dukuray^[biyag15@gmail.com]
- - Nikoleta Emanouilidi^[nicolettaemm@gmail.com]
- - Markella Gialouris^[markella.gialouris07@spsmail.cuny.edu]
+title: "Project 3"
+author: "Brandon Cunningham, 
+Rashad Long, 
+Biyag Dukuray, 
+Nikoleta Emanouilidi, 
+Markella Gialouris"
 date: "`r Sys.Date()`"
 output: html_document
 ---
@@ -20,11 +19,10 @@ library(magick)
 library(here) # For making the script run without a wd
 library(magrittr) # For piping the logo to the plot
 library(gtable)
-library(grid)
 ```
 
 ## Introduction
-This project aims to establish a quantitative assessment of the relative value of specific skills for data science professionals. We will achieve this by analyzing data extracted from job postings on relevant job boards. The analysis will focus on two key aspects of data scientist job postings: advertised salary and the frequency of specific skills mentioned in the job descriptions. By correlating these factors, we can develop a proxy measure to compare the relative value of various skills sought after in the data science job market.
+In this project we will be attempting to figure out the value of certain skills for a data scientist to have. Our method for determining value revolves around grabbing job postings for data scientists from job board websites and obtaining the expected salary of each listing and the skills mentioned in its description in conjunction with the pure number of times a skill is mentioned to come up with a proxy measure for its relative value compared to other skills.
 
 
 ```{r}
@@ -32,7 +30,6 @@ Postings_url <- 'https://media.githubusercontent.com/media/RDLong718/data607-pro
 Postings_raw <- readr::read_csv(Postings_url)
 Salries_url <- 'https://media.githubusercontent.com/media/RDLong718/data607-project3/main/Data/job_details/salaries.csv'
 Salaries_raw <- readr::read_csv(Salries_url)
-
 ```
 
 ```{r}
@@ -70,91 +67,77 @@ linkedin_clean$visualization <- ifelse(grepl('visualization|presentation', linke
 linkedin_clean$collaberation <- ifelse(grepl('team work|with a team|collaberat|scrum team|agile team', linkedin_clean$description, ignore.case = TRUE), 1,0)
 ```
 
-### Analysis
-
-We will now analyze the data to determine the top 5 skills that are most frequently mentioned in the job postings.
-
-
 ```{r}
-# make a vector of the column skill names in linkedin_clean
+
+# make a vector of the column names in linkedin_clean
 skill_names <- colnames(linkedin_clean)[5:ncol(linkedin_clean)]
+skill_names
 
-# Make a new data frame with the total number of times each skill is mentioned top 5
-top5_skills <- linkedin_clean |>
-  select(skill_names) |>
-  summarise_all(sum) |>
-  gather(skill, total) |>
-  arrange(desc(total)) |>
-  head(5)
+# make a new data frame with the skill names and the count of each skill
+skills <- linkedin_clean %>%
+  gather(key = "skill", value = "count", (all_of(skill_names))) |> 
+  group_by(skill) |> 
+  summarize(total = sum(count)) |> 
+  arrange(desc(total))
 
-top5_skills
-```
+skills <- 
+  head(skills, 5)
 
-
-
-```{r include=FALSE}
-# Download PNG files of the LinkedIn logo
-download.file(
-  "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/LinkedIn_logo_initials.png/900px-LinkedIn_logo_initials.png",
-  mode = "wb",
-  destfile = here("linkedin_logo.png")
-)
-```
-
-We see that the top 5 skills are: Programming, Machine Learning, Stats, Cloud Computing, and Visualization. We will now create a bar plot to visualize the top 5 skills and their frequency in the job postings.
+# Dowload PNG files of the LinkedIn logo
+download.file("https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/LinkedIn_logo_initials.png/900px-LinkedIn_logo_initials.png", mode ="wb", destfile = here("linkedin_logo.png"))
 
 
-```{r}
-
-# Position the logo via rasterGrob.
-get_png <-
-  function(filename,
-           x = unit(0.5, "npc"),
-           y = unit(0.5, "npc"),
-           width = NULL,
-           height = NULL,
-           gp = grid::gpar()) {
-    grid::rasterGrob(
-      png::readPNG(filename),
-      interpolate = TRUE,
-      x = x,
-      y = y,
-      width = width,
-      height = height,
-      gp = gp
-    )
-  }
+# Position the logo via rasterGrab
+get_png <- function(filename, x = unit(0.5, "npc"), y= unit(0.5, "npc"), 
+                    width = NULL, height = NULL, gp = grid::gpar()) {
+  grid::rasterGrob(png::readPNG(filename), interpolate = TRUE,
+                   x = x, y = y, width = width, height = height, gp = gp)
+}
 
 width = 3
 
-# Save the logo as a grob
-logo <-
-  get_png(
-    here("linkedin_logo.png"),
-    x = unit(1.31, "npc") - unit(width / 2, "lines"),
-    y = unit(0, "lines"),
-    width = unit(width, "lines")
-  )
+# Create the plot
+l <- get_png(
+  "linkedin_logo.png",
+  x = unit(1, "npc") - unit(width / 2, "lines"),
+  y = unit(-width, "lines"),
+  width = unit(width, "lines")
+)
+# plot skills
 
-# Plot the Top 5 skills
-top5_skills_plot <- function(x, width = 3) {
-  ggplot(top5_skills, aes(
+skills_plot <- function(x, width = 3) {
+  ggplot(skills, aes(
     x = reorder(skill, total),
     y = total,
     fill = skill
   )) +
     geom_col() +
+    
     coord_cartesian(clip = "off") +
+    
     theme(
-      axis.text.x = element_blank(),
-      axis.text.y = element_blank(),
-      axis.ticks = element_blank()
+      axis.text.x = element_text(
+        face = "bold",
+        color = "red",
+        size = 8,
+        angle = 45,
+        vjust = .6,
+        hjust = .6
+      ),
+      axis.text.y = element_text(
+        face = "bold",
+        color = "blue",
+        size = 8,
+        angle = 45
+      )
     ) +
-    geom_text(aes(label = total), vjust = -0.2) +
-    labs(x = "", y = "", title = "Top 5 Skills on LinkedIn for Data Scientists")
+    labs(x = "Skill", y = "Count", title = "Top 5 Skills on LinkedIn")
 }
+skills_plot(skills) + annotation_custom(l)
 
-top5_skills_plot(top5_skills) + scale_fill_manual(values = c("#caf0f8", "#00b4d8", "#03045e", "#0077b6", "#90e0ef")) + annotation_custom(logo)
+
+
+
 ```
 
 
