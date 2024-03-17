@@ -1,7 +1,7 @@
 ---
 title: "Project 3 - Data Science Skills"
 author:
- - Brandon Cunningham^[btc2628@g.rit.edu]
+ - Brandon Cunningham^[cunningham.brandon3@gmail.com]
  - Rashad Long^[RDLong718@gmail.com]
  - Biyag Dukuray^[biyag15@gmail.com]
  - Nikoleta Emanouilidi^[nicolettaemm@gmail.com]
@@ -21,6 +21,7 @@ library(here) # For making the script run without a wd
 library(magrittr) # For piping the logo to the plot
 library(gtable)
 library(grid)
+library(png)
 ```
 
 ## Introduction
@@ -64,10 +65,10 @@ Here's a template for searching for words/terms:
 ```{r}
 linkedin_clean$Programming <- ifelse(grepl('python| r | r/|/r/|/r|\\(r,| r,| r.|c\\+\\+|sql', linkedin_clean$description, ignore.case = TRUE), 1,0)
 linkedin_clean$Machine_Learning <- ifelse(grepl('machine learning| ml|algorithms|scikit learn|transformers|language model', linkedin_clean$description, ignore.case = TRUE), 1,0)
-linkedin_clean$Stats <- ifelse(grepl('data analysis|data analytics|statistical analysis|data-driven analysis', linkedin_clean$description, ignore.case = TRUE), 1,0)
-linkedin_clean$cloud_computing <- ifelse(grepl('cloud computing| aws|\\(aws|/aws|amazon web|google cloud', linkedin_clean$description, ignore.case = TRUE), 1,0)
-linkedin_clean$visualization <- ifelse(grepl('visualization|presentation', linkedin_clean$description, ignore.case = TRUE), 1,0)
-linkedin_clean$collaboration <- ifelse(grepl('team work|with a team|collaborate|scrum team|agile team', linkedin_clean$description, ignore.case = TRUE), 1,0)
+linkedin_clean$Statistics <- ifelse(grepl('data analysis|data analytics|statistical analysis|data-driven analysis', linkedin_clean$description, ignore.case = TRUE), 1,0)
+linkedin_clean$Cloud_Computing <- ifelse(grepl('cloud computing| aws|\\(aws|/aws|amazon web|google cloud', linkedin_clean$description, ignore.case = TRUE), 1,0)
+linkedin_clean$Visualization <- ifelse(grepl('visualization|presentation', linkedin_clean$description, ignore.case = TRUE), 1,0)
+linkedin_clean$Collaboration <- ifelse(grepl('team work|with a team|collaborat|scrum team|agile team', linkedin_clean$description, ignore.case = TRUE), 1,0)
 linkedin_clean$Detail_Orientation <- ifelse(grepl("detail oriented|meticulous|precise|thorough|attention to detail|accuracy", linkedin_clean$description, ignore.case = TRUE), 1, 0)
 linkedin_clean$Critical_Thinking <- ifelse(grepl( "critical thinking|problem solving|analytical skills|logical analysis|creative problem solving|critical reasoning", linkedin_clean$description, ignore.case = TRUE), 1, 0)
 linkedin_clean$Communication_Skills <- ifelse(grepl("written and verbal communication|effective communication|articulate|persuasive|clear communication|concise communication|communication skills", linkedin_clean$description, ignore.case = TRUE), 1, 0)
@@ -105,7 +106,7 @@ download.file(
 )
 ```
 
-We see that the top 5 skills are: Programming, Machine Learning, Stats, Cloud Computing, and Visualization. We will now create a bar plot to visualize the top 5 skills and their frequency in the job postings.
+We see that the top 5 skills are: Programming, Collaboration, Statistics, Machine Learning, and Visualization. We will now create a bar plot to visualize the top 5 skills and their frequency in the job postings.
 
 
 ```{r}
@@ -160,5 +161,3 @@ top5_skills_plot <- function(x, width = 3) {
 
 top5_skills_plot(top5_skills) + scale_fill_manual(values = c("#caf0f8", "#00b4d8", "#03045e", "#0077b6", "#90e0ef")) + annotation_custom(logo)
 ```
-
-
