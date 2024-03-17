@@ -67,7 +67,7 @@ linkedin_clean$Machine_Learning <- ifelse(grepl('machine learning| ml|algorithms
 linkedin_clean$Stats <- ifelse(grepl('data analysis|data analytics|statistical analysis|data-driven analysis', linkedin_clean$description, ignore.case = TRUE), 1,0)
 linkedin_clean$cloud_computing <- ifelse(grepl('cloud computing| aws|\\(aws|/aws|amazon web|google cloud', linkedin_clean$description, ignore.case = TRUE), 1,0)
 linkedin_clean$visualization <- ifelse(grepl('visualization|presentation', linkedin_clean$description, ignore.case = TRUE), 1,0)
-linkedin_clean$collaberation <- ifelse(grepl('team work|with a team|collaberat|scrum team|agile team', linkedin_clean$description, ignore.case = TRUE), 1,0)
+linkedin_clean$collaboration <- ifelse(grepl('team work|with a team|collaborat|scrum team|agile team', linkedin_clean$description, ignore.case = TRUE), 1,0)
 ```
 
 ### Analysis
