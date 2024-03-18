@@ -76,6 +76,69 @@ linkedin_clean$Communication_Skills <- ifelse(grepl("written and verbal communic
 linkedin_clean$Predictive_Analytics <- ifelse(grepl("forecasting|predictive modeling|predictive analytics|statistical forecasting|data forecasting|forecasting techniques", linkedin_clean$description, ignore.case = TRUE), 1, 0)
 ```
 
+
+```{r}
+skill_ranking <- linkedin_clean[,4:14]
+
+skill_ranking_long <- skill_ranking %>%
+  pivot_longer(cols = -med_salary, names_to = "skill", values_to = "has_skill") %>%
+  filter(has_skill == 1) %>%
+  select(-has_skill)
+
+skill_count <- skill_ranking_long %>%
+  group_by(skill) %>%
+  summarize(
+    count = n()
+  )
+
+skill_count <- skill_count %>%
+  mutate(
+    count_rank = rank(desc(count))
+  )
+```
+```{r}
+skill_median_salary <- skill_ranking %>%
+  select(med_salary, Programming, Machine_Learning, Stats, cloud_computing, visualization, collaboration,Detail_Orientation,Critical_Thinking,Communication_Skills,Predictive_Analytics) %>%
+  pivot_longer(cols = -med_salary, names_to = "skill", values_to = "has_skill") %>%
+  filter(has_skill == 1) %>%
+  select(-has_skill) %>%
+  distinct() %>%
+  arrange(desc(med_salary)) %>%
+  mutate(
+    median_salary_rank = rank(desc(med_salary))
+  )
+
+skill_ranking_summary <- inner_join(skill_count, skill_median_salary, by = "skill") %>%
+  mutate(
+    combined_rank = (count_rank + median_salary_rank) / 2
+  ) %>%
+  select(skill, count_rank, median_salary_rank, combined_rank)
+
+```
+```{r}
+ggplot(skill_count, aes(x = reorder(skill, -count), y = count, fill = skill)) +
+  geom_bar(stat = "identity")  +
+  coord_flip() +
+  labs(title = "Number of Times Each Skill Shows Up",
+       x = "Skill",
+       y = "Count") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 12),  
+        axis.title = element_text(size = 14),  
+        plot.title = element_text(size = 16),  
+        panel.background = element_rect(fill = "lightgray"))
+
+
+```
+```{r}
+### wordcloud (optional) 
+library(ggwordcloud)
+ggplot(skill_count, aes(label = skill, size = count)) +
+  geom_text_wordcloud() +
+  theme_light() 
+
+```
+
+
 ### Analysis
 
 We will now analyze the data to determine the top 5 skills that are most frequently mentioned in the job postings.
