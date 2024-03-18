@@ -98,7 +98,7 @@ skill_count <- skill_count %>%
 ```
 ```{r}
 skill_median_salary <- skill_ranking %>%
-  select(med_salary, Programming, Machine_Learning, Statitics, Cloud_Computing, Visualization, Collaboration,Detail_Orientation,Critical_Thinking,Communication_Skills,Predictive_Analytics) %>%
+  select(med_salary, Programming, Machine_Learning, Statistics, Cloud_Computing, Visualization, Collaboration,Detail_Orientation,Critical_Thinking,Communication_Skills,Predictive_Analytics) %>%
   pivot_longer(cols = -med_salary, names_to = "skill", values_to = "has_skill") %>%
   filter(has_skill == 1) %>%
   select(-has_skill) %>%
