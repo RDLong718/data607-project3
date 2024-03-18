@@ -274,4 +274,6 @@ combined_ranking_plot <- ggplot(skill_ranking_summary, aes(x = reorder(skill, co
   plot.title = element_text(size = 14, hjust = 0.5),
   panel.background = element_rect(fill = "lightgray"))
 
+print(combined_ranking_plot)
+
 ```
