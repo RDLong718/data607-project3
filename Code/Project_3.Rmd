@@ -98,7 +98,7 @@ skill_count <- skill_count %>%
 ```
 ```{r}
 skill_median_salary <- skill_ranking %>%
-  select(med_salary, Programming, Machine_Learning, Stats, cloud_computing, visualization, collaboration,Detail_Orientation,Critical_Thinking,Communication_Skills,Predictive_Analytics) %>%
+  select(med_salary, Programming, Machine_Learning, Statitics, Cloud_Computing, Visualization, Collaboration,Detail_Orientation,Critical_Thinking,Communication_Skills,Predictive_Analytics) %>%
   pivot_longer(cols = -med_salary, names_to = "skill", values_to = "has_skill") %>%
   filter(has_skill == 1) %>%
   select(-has_skill) %>%
@@ -263,5 +263,15 @@ ggplot(Skill_Salary, aes(x = reorder(Skill, -Avg_Salary), y = Avg_Salary, fill=S
   scale_fill_manual(values = manual_colors)
 
 ```
+```{r}
 
+combined_ranking_plot <- ggplot(skill_ranking_summary, aes(x = reorder(skill, combined_rank), y = combined_rank)) +
+  geom_bar(stat = "identity", aes(fill = skill)) +
+  scale_fill_manual(values = manual_colors) +   
+  labs(title = "Combined Ranking of Skills", x = "Skill", y = "Combined Rank") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10),
+  axis.title = element_text(size = 12),
+  plot.title = element_text(size = 14, hjust = 0.5),
+  panel.background = element_rect(fill = "lightgray"))
 
+```
