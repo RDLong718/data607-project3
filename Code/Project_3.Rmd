@@ -110,7 +110,7 @@ skill_median_salary <- skill_ranking %>%
 
 skill_ranking_summary <- inner_join(skill_count, skill_median_salary, by = "skill") %>%
   mutate(
-    combined_rank = (count_rank + median_salary_rank) / 2
+    combined_rank = median_salary_rank
   ) %>%
   select(skill, count_rank, median_salary_rank, combined_rank)
 
@@ -130,7 +130,7 @@ ggplot(skill_count, aes(x = reorder(skill, -count), y = count, fill = skill)) +
 
 ```
 ```{r}
-### wordcloud (optional) 
+
 library(ggwordcloud)
 ggplot(skill_count, aes(label = skill, size = count)) +
   geom_text_wordcloud() +
@@ -264,7 +264,6 @@ ggplot(Skill_Salary, aes(x = reorder(Skill, -Avg_Salary), y = Avg_Salary, fill=S
 
 ```
 ```{r}
-
 combined_ranking_plot <- ggplot(skill_ranking_summary, aes(x = reorder(skill, combined_rank), y = combined_rank)) +
   geom_bar(stat = "identity", aes(fill = skill)) +
   scale_fill_manual(values = manual_colors) +   
@@ -273,7 +272,9 @@ combined_ranking_plot <- ggplot(skill_ranking_summary, aes(x = reorder(skill, co
   axis.title = element_text(size = 12),
   plot.title = element_text(size = 14, hjust = 0.5),
   panel.background = element_rect(fill = "lightgray"))
-
-print(combined_ranking_plot)
-
+combined_ranking_plot
 ```
+
+## **Conclusion**
+
+An analysis of job postings on LinkedIn for data science positions indicates that Cloud Computing is the skill with the highest average salary, closely followed by Statistics. Despite this, the variation in average salaries across different skills appears relatively small. The top five skills most frequently mentioned in these job postings are Programming, Collaboration, Statistics, Machine Learning, and Visualization. However, the disparity in average salaries between the top-ranked and lowest-ranked skills, such as Predictive Analytics, is moderate, suggesting a fairly uniform distribution of salary expectations regardless of the specific skill set required. This underscores the importance for data science professionals to cultivate a diverse skill set that encompasses both technical expertise and soft skills, as a well-rounded skill set is highly valued in the competitive data science job market.
