@@ -103,9 +103,9 @@ skill_median_salary <- skill_ranking %>%
   filter(has_skill == 1) %>%
   select(-has_skill) %>%
   distinct() %>%
-  arrange(desc(med_salary)) %>%
+  arrange(med_salary) %>%
   mutate(
-    median_salary_rank = rank(desc(med_salary))
+    median_salary_rank = rank(med_salary)
   )
 
 skill_ranking_summary <- inner_join(skill_count, skill_median_salary, by = "skill") %>%
